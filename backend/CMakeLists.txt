@@ -3,13 +3,6 @@ project(BankingServer LANGUAGES CXX)
 
 find_program(CLANG_TIDY_EXE NAMES clang-tidy)
 
-if(CLANG_TIDY_EXE)
-  message(STATUS "Found clang-tidy: ${CLANG_TIDY_EXE}")
-  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
-else()
-  message(WARNING "clang-tidy not found, skipping static analysis")
-endif()
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -54,12 +47,19 @@ target_link_libraries(banking-client-cli
       OpenSSL::Crypto
 )
 
-add_custom_target(
-    tidy
-    COMMAND ${CLANG_TIDY_EXE}
-            -p ${CMAKE_BINARY_DIR}
-            ${PROJECT_SOURCE_DIR}/src/*.cpp
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Running clang-tidy..."
-    VERBATIM
-)
+find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+
+if(CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+    add_custom_target(tidy
+        COMMAND ${CLANG_TIDY_EXE}
+                -p ${CMAKE_BINARY_DIR}
+                ${CMAKE_SOURCE_DIR}/backend/src/*.cpp
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Running clang-tidy over backend sources"
+    )
+else()
+    message(WARNING "clang-tidy not found, 'make tidy' target will be unavailable")
+endif()
