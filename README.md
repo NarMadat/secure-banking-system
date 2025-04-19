@@ -5,8 +5,6 @@
 [![Build GUI Client](https://img.shields.io/badge/build-gui--client-green)](#gui-client)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
-> **Dynamic, live‑updating documentation** for your POSIX‑socket banking system with TLS, thread‑pool backend and Qt GUI client.
-
 ---
 
 ## 📑 Table of Contents
