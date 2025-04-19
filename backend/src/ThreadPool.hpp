@@ -1,4 +1,4 @@
-// backend/src/ThreadPool.hpp
+
 #pragma once
 
 #include <vector>
@@ -14,20 +14,20 @@ public:
     explicit ThreadPool(size_t numThreads);
     ~ThreadPool();
 
-    // Добавляем задачу в очередь
+    
     void enqueue(std::function<void()> task);
 
 private:
-    // Рабочие потоки
+    
     std::vector<std::thread> workers_;
-    // Очередь задач
+    
     std::queue<std::function<void()>> tasks_;
 
-    // Синхронизация
+    
     std::mutex queueMutex_;
     std::condition_variable condition_;
-    std::atomic<bool> stop_;  // флаг остановки
+    std::atomic<bool> stop_;  
 
-    // Функция цикла каждого потока
+    
     void workerLoop();
 };

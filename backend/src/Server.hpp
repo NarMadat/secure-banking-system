@@ -1,4 +1,4 @@
-// backend/src/Server.hpp
+
 #pragma once
 
 #include "ThreadPool.hpp"
@@ -13,29 +13,29 @@ class Server
 {
 public:
 
-    // port — порт для прослушивания
-    // certFile, keyFile — пути к .crt и .key
+    
+    
     Server(int port,
            const std::string &certFile,
            const std::string &keyFile);
     ~Server();
 
-    // Запустить цикл приёма клиентов
+    
     void run();
 
 private:
-    int server_fd_;      // файловый дескриптор слушающего сокета
-    ThreadPool pool_;    // пул рабочих потоков
-    AccountStore store_; // хранилище аккаунтов
-    SSL_CTX *sslCtx_;    // контекст OpenSSL
+    int server_fd_;      
+    ThreadPool pool_;    
+    AccountStore store_; 
+    SSL_CTX *sslCtx_;    
 
-    // Инициализация OpenSSL
+    
     void initSSL(const std::string &certFile,
                  const std::string &keyFile);
 
-    // Цикл приёма и распределения соединений
+    
     void acceptClients();
 
-    // Обработка одного клиента по SSL
+    
     void handleClientSSL(SSL *ssl);
 };

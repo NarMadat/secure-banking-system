@@ -1,10 +1,4 @@
-/****************************************************************************
-** Meta object code from reading C++ file 'MainWindow.hpp'
-**
-** Created by: The Qt Meta Object Compiler version 69 (Qt 6.9.0)
-**
-** WARNING! All changes made in this file will be lost!
-*****************************************************************************/
+
 
 #include "../../../src/MainWindow.hpp"
 #include <QtCore/qmetatype.h>
@@ -32,7 +26,7 @@ QT_WARNING_DISABLE_DEPRECATED
 QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
 struct qt_meta_tag_ZN10MainWindowE_t {};
-} // unnamed namespace
+} 
 
 template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_tag_ZN10MainWindowE_t>()
 {
@@ -50,17 +44,17 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'onCommandChanged'
+        
         QtMocHelpers::SlotData<void(int)>(1, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::Int, 3 },
         }}),
-        // Slot 'onSendClicked'
+        
         QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onSslConnected'
+        
         QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onReadyRead'
+        
         QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onErrorOccurred'
+        
         QtMocHelpers::SlotData<void(QAbstractSocket::SocketError)>(7, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 8, 2 },
         }}),

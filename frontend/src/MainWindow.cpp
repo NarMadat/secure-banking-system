@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi();
 
-    // Сигналы SSL-сокета
+    
     connect(sslSocket_, &QSslSocket::encrypted,
             this, &MainWindow::onSslConnected);
     connect(sslSocket_, &QSslSocket::readyRead,
@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(sslSocket_, &QSslSocket::errorOccurred,
             this, &MainWindow::onErrorOccurred);
 
-    // Сигналы UI
+    
     connect(cmdCombo_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::onCommandChanged);
     connect(sendBtn_, &QPushButton::clicked,
@@ -38,7 +38,7 @@ void MainWindow::setupUi() {
 
     auto *layout = new QVBoxLayout(central);
 
-    // Хост/порт
+    
     auto *hp = new QHBoxLayout;
     hp->addWidget(new QLabel("Host:"));
     hostEdit_ = new QLineEdit("localhost");
@@ -48,7 +48,7 @@ void MainWindow::setupUi() {
     hp->addWidget(portEdit_);
     layout->addLayout(hp);
 
-    // Команды
+    
     auto *cmdLay = new QHBoxLayout;
     cmdLay->addWidget(new QLabel("Command:"));
     cmdCombo_ = new QComboBox;
@@ -56,7 +56,7 @@ void MainWindow::setupUi() {
     cmdLay->addWidget(cmdCombo_);
     layout->addLayout(cmdLay);
 
-    // ID / ToID / Amount
+    
     auto *fLay = new QHBoxLayout;
     fLay->addWidget(new QLabel("ID:"));
     idEdit_ = new QLineEdit;
@@ -69,11 +69,11 @@ void MainWindow::setupUi() {
     fLay->addWidget(amountEdit_);
     layout->addLayout(fLay);
 
-    // Send button
+    
     sendBtn_ = new QPushButton("Send");
     layout->addWidget(sendBtn_);
 
-    // Log
+    
     logEdit_ = new QTextEdit;
     logEdit_->setReadOnly(true);
     layout->addWidget(logEdit_);

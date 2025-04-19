@@ -15,7 +15,7 @@ AccountStore::~AccountStore() {
 
 void AccountStore::load() {
     std::ifstream in(filename_);
-    if (!in.is_open()) return;  // если файла нет — ничего не делаем
+    if (!in.is_open()) return;  
 
     std::string line;
     while (std::getline(in, line)) {
@@ -37,7 +37,7 @@ void AccountStore::save() {
 
 bool AccountStore::createAccount(const std::string& id, double initialBalance) {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (accounts_.count(id)) return false; // уже есть
+    if (accounts_.count(id)) return false; 
     accounts_[id] = initialBalance;
     save();
     return true;

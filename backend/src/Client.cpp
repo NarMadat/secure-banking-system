@@ -1,4 +1,4 @@
-// Client.cpp — простой TLS‑клиент для банковского сервера
+
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
@@ -18,21 +18,21 @@ int main(int argc, char** argv) {
     const char* certFile = argv[3];
     const char* keyFile  = argv[4];
 
-    // 1) Инициализируем OpenSSL
+    
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
 
-    // 2) Создаём клиентский контекст
+    
     SSL_CTX* ctx = SSL_CTX_new(TLS_client_method());
     if (!ctx) {
         ERR_print_errors_fp(stderr);
         return 1;
     }
-    // Отключаем проверку цепочки (для самоподписанного сертификата)
+    
     SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, nullptr);
 
-    // 3) Создаём SSL-объект
+    
     SSL* ssl = SSL_new(ctx);
     if (!ssl) {
         ERR_print_errors_fp(stderr);
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // 4) Устанавливаем TCP‑соединение
+    
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("socket");
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // 5) Подключаем SSL к сокету и выполняем рукопожатие
+    
     SSL_set_fd(ssl, sock);
     if (SSL_connect(ssl) <= 0) {
         ERR_print_errors_fp(stderr);
@@ -72,13 +72,13 @@ int main(int argc, char** argv) {
     }
     std::cout << "Connected (TLS " << SSL_get_version(ssl) << ")\n";
 
-    // 6) Читаем команду от пользователя
+    
     std::cout << "Введите команду (например, CREATE Alice 1000): ";
     std::string cmd;
     std::getline(std::cin, cmd);
     cmd += "\n";
 
-    // 7) Отправляем команду и получаем ответ
+    
     SSL_write(ssl, cmd.c_str(), cmd.size());
 
     char buf[1024];
@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
         std::cerr << "Ошибка чтения ответа\n";
     }
 
-    // 8) Завершаем соединение и чистим
+    
     SSL_shutdown(ssl);
     close(sock);
     SSL_free(ssl);
