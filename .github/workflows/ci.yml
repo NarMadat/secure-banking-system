@@ -1,0 +1,48 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential clang-tidy clang-format libssl-dev qtbase5-dev libqt5network5-dev
+
+      - name: Run clang-tidy
+        run: |
+          mkdir -p backend/build
+          cd backend/build
+          cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          make tidy
+
+      - name: Build backend
+        run: |
+          cd backend/build
+          make
+
+      - name: Build CLI client
+        run: |
+          cd backend/build
+          make banking-client-cli
+
+      - name: Build GUI client
+        run: |
+          mkdir -p banking-client-qt/build
+          cd banking-client-qt/build
+          cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5
+          make
+
+      - name: Check formatting
+        shell: bash
+        run: |
+          git diff --exit-code <(find . -name '*.cpp' -o -name '*.hpp' | xargs clang-format -style=file)
