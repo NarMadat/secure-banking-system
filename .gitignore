@@ -4,3 +4,5 @@
 .DS_Store
 CMakeFiles/
 CMakeCache.txt
+/backend/ssl/server.key
+/backend/accounts.db
