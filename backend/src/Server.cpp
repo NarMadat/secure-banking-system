@@ -1,5 +1,3 @@
-
-
 #include "Server.hpp"
 
 #include <sys/socket.h>
@@ -21,18 +19,18 @@ Server::Server(int port,
     store_("accounts.db"),
     sslCtx_(nullptr)
 {
-    
+
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
     initSSL(certFile, keyFile);
 
-    
+
     server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd_ < 0)
         throw std::runtime_error(std::string("socket() failed: ") + std::strerror(errno));
 
-    
+
     int opt = 1;
     if (setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
         throw std::runtime_error(std::string("setsockopt() failed: ") + std::strerror(errno));
@@ -92,11 +90,11 @@ void Server::acceptClients() {
             continue;
         }
 
-        
+
         SSL* ssl = SSL_new(sslCtx_);
         SSL_set_fd(ssl, client_fd);
 
-        
+
         pool_.enqueue([this, ssl, client_fd]() {
             if (SSL_accept(ssl) <= 0) {
                 ERR_print_errors_fp(stderr);
@@ -116,7 +114,7 @@ void Server::handleClientSSL(SSL* ssl) {
     if (n <= 0) return;
     tmp[n] = '\0';
 
-    
+
     std::string buf(tmp);
     buf.erase(std::remove(buf.begin(), buf.end(), '\r'), buf.end());
     if (!buf.empty() && buf.back() == '\n')
@@ -124,7 +122,7 @@ void Server::handleClientSSL(SSL* ssl) {
 
     std::cout << ">> Received raw command: [" << buf << "]\n";
 
-    
+
     std::istringstream iss(buf);
     std::string cmd, id, toId;
     double amount;

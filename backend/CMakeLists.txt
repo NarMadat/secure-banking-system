@@ -1,15 +1,22 @@
 cmake_minimum_required(VERSION 3.15)
 project(BankingServer LANGUAGES CXX)
 
+find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+
+if(CLANG_TIDY_EXE)
+  message(STATUS "Found clang-tidy: ${CLANG_TIDY_EXE}")
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+else()
+  message(WARNING "clang-tidy not found, skipping static analysis")
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 1) Указываем, где Homebrew положил OpenSSL
 set(OPENSSL_ROOT_DIR "/opt/homebrew/opt/openssl@3")
 set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
 set(OPENSSL_LIB_DIR     "${OPENSSL_ROOT_DIR}/lib")
 
-# 2) Ищем OpenSSL
 find_package(OpenSSL REQUIRED)
 
 add_executable(banking-server
@@ -19,14 +26,12 @@ add_executable(banking-server
     src/AccountStore.cpp
 )
 
-# 3) Пути к нашим хедерам и к OpenSSL
 target_include_directories(banking-server
     PRIVATE
       src
       ${OPENSSL_INCLUDE_DIR}
 )
 
-# 4) Линкуем OpenSSL
 target_link_directories(banking-server PRIVATE ${OPENSSL_LIB_DIR})
 target_link_libraries(banking-server
     PRIVATE
@@ -47,4 +52,14 @@ target_link_libraries(banking-client-cli
     PRIVATE
       OpenSSL::SSL
       OpenSSL::Crypto
+)
+
+add_custom_target(
+    tidy
+    COMMAND ${CLANG_TIDY_EXE}
+            -p ${CMAKE_BINARY_DIR}
+            ${PROJECT_SOURCE_DIR}/src/*.cpp
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running clang-tidy..."
+    VERBATIM
 )

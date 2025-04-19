@@ -1,4 +1,3 @@
-
 #include "ThreadPool.hpp"
 
 ThreadPool::ThreadPool(size_t numThreads)

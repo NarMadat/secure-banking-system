@@ -8,7 +8,6 @@ public:
     explicit AccountStore(const std::string& filename);
     ~AccountStore();
 
-    
     bool createAccount(const std::string& id, double initialBalance);
     bool deposit(const std::string& id, double amount);
     bool withdraw(const std::string& id, double amount);
@@ -16,8 +15,8 @@ public:
     double getBalance(const std::string& id);
 
 private:
-    void load();   
-    void save();   
+    void load();
+    void save();
 
     std::unordered_map<std::string, double> accounts_;
     std::mutex mutex_;

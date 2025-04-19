@@ -1,5 +1,3 @@
-
-
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <arpa/inet.h>
@@ -18,21 +16,18 @@ int main(int argc, char** argv) {
     const char* certFile = argv[3];
     const char* keyFile  = argv[4];
 
-    
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
 
-    
     SSL_CTX* ctx = SSL_CTX_new(TLS_client_method());
     if (!ctx) {
         ERR_print_errors_fp(stderr);
         return 1;
     }
-    
+
     SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, nullptr);
 
-    
     SSL* ssl = SSL_new(ctx);
     if (!ssl) {
         ERR_print_errors_fp(stderr);
@@ -40,7 +35,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("socket");
@@ -61,7 +55,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    
     SSL_set_fd(ssl, sock);
     if (SSL_connect(ssl) <= 0) {
         ERR_print_errors_fp(stderr);
@@ -72,13 +65,11 @@ int main(int argc, char** argv) {
     }
     std::cout << "Connected (TLS " << SSL_get_version(ssl) << ")\n";
 
-    
-    std::cout << "Введите команду (например, CREATE Alice 1000): ";
+    std::cout << "Введите команду (например, CREATE Alice or Garnik 1000): ";
     std::string cmd;
     std::getline(std::cin, cmd);
     cmd += "\n";
 
-    
     SSL_write(ssl, cmd.c_str(), cmd.size());
 
     char buf[1024];
@@ -90,7 +81,6 @@ int main(int argc, char** argv) {
         std::cerr << "Ошибка чтения ответа\n";
     }
 
-    
     SSL_shutdown(ssl);
     close(sock);
     SSL_free(ssl);
